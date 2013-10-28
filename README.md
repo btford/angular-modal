@@ -17,6 +17,8 @@ bower install angular-modal
 
 ## Examples
 
+[Plunker demo](http://plnkr.co/edit/lJDNqafSCKdpMI8AjR0B?p=preview)
+
 ### Typical Use
 
 > app.js
