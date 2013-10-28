@@ -40,7 +40,7 @@ controller('MyModalCtrl', function (myModal) {
 }).
 
 controller('MyCtrl', function (myModal) {
-  $scope.showModal = myModal.activate;
+  this.showModal = myModal.activate;
 });
 ```
 
@@ -108,8 +108,8 @@ angular.module('myApp', []).
 // let's make a modal called myModal
 factory('myModal', function (btfModal) {
   return btfModal({
-    controller: function ($scope) {
-      $scope.name = 'World';
+    controller: function () {
+      this.name = 'World';
     },
     controllerAs: 'ctrl',
     template: '<div class="btf-modal">Hello {{ctrl.name}}</div>'
@@ -117,15 +117,16 @@ factory('myModal', function (btfModal) {
 }).
 
 controller('MyCtrl', function (myModal) {
-  $scope.showModal = myModal.activate;
+  this.showModal = myModal.activate;
 });
 ```
 
 ```html
 <div ng-app="myApp" ng-controller="MyCtrl">
-  <a href ng-click="showModal()">Show the modal</a>
+  <a href ng-click="ctrl.showModal()">Show the modal</a>
 </div>
 ```
+
 
 ## API
 
