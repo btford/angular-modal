@@ -9,7 +9,6 @@
   min-width: 330px;
   height: auto;
   z-index: 2000;
-  visibility: hidden;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   backface-visibility: hidden;
