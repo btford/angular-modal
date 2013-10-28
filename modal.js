@@ -36,7 +36,9 @@ factory('btfModal', function ($compile, $rootScope, $controller, $q, $http, $tem
 
     function activate (locals) {
       html.then(function (html) {
-        attach(html, locals);
+        if (!element) {
+          attach(html, locals);
+        }
       });
     }
 

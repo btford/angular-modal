@@ -116,6 +116,20 @@ describe('btfModal', function() {
 
       expect(container.text()).toBe('bon soir');
     });
+
+    it('should not activate multiple times', function() {
+      var modal = btfModal({
+        template: '<span>x</span>',
+        container: container
+      });
+
+      modal.activate();
+      rootScope.$digest();
+      modal.activate();
+      rootScope.$digest();
+
+      expect(container.text()).toBe('x');
+    });
   });
 
 
