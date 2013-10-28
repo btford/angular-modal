@@ -75,22 +75,33 @@ Building on the example above:
 ```javascript
 // ...
 controller('MyModalCtrl', function (myModal, $timeout) {
-  var scope = this;
 
-  this.closeMe = myModal.deactivate;
-  this.tickCount = 0;
+  var ctrl = this,
+      timeoutId;
 
-  var timeoutId;
+  ctrl.tickCount = 5;
+
+  ctrl.closeMe = function () {
+    cancelTick();
+    myModal.deactivate();
+  };
+
   function tick() {
     timeoutId = $timeout(function() {
-      scope.tickCount += 1;
-      tick();
+      ctrl.tickCount -= 1;
+      if (ctrl.tickCount <= 0) {
+        ctrl.closeMe();
+      } else {
+        tick();
+      }
     }, 1000);
   }
 
-  this.$on('$destroy', function() {
+  function cancelTick() {
     $timeout.cancel(timeoutId);
-  });
+  }
+
+  $scope.$on('$destroy', cancelTick);
 
   tick();
 }).
