@@ -65,9 +65,14 @@ factory('btfModal', function ($compile, $rootScope, $controller, $q, $http, $tem
       }
     }
 
+    function active () {
+      return !!element;
+    }
+
     return {
       activate: activate,
-      deactivate: deactivate
+      deactivate: deactivate,
+      active: active
     };
   };
 });

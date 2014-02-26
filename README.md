@@ -191,6 +191,10 @@ Adds the modal to the DOM by prepending it to the `<body>`.
 
 Removes the modal (DOM and scope) from the DOM.
 
+#### `modalService.active`
+
+Returns whether or not the modal is currently activated.
+
 
 ## Tests
 

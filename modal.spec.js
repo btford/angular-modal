@@ -152,4 +152,26 @@ describe('btfModal', function() {
   });
 
 
+  describe('#active', function () {
+    it('should return the state of the modal', function() {
+
+      var modal = btfModal({
+        template: '<span>{{greeting}}</span>',
+        container: container
+      });
+
+      rootScope.$digest();
+      expect(modal.active()).toBe(false);
+
+      modal.activate();
+      rootScope.$digest();
+      expect(modal.active()).toBe(true);
+
+      modal.deactivate();
+      rootScope.$digest();
+      expect(modal.active()).toBe(false);
+    });
+  });
+
+
 });
