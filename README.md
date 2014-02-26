@@ -24,7 +24,7 @@ bower install angular-modal
 > app.js
 
 ```javascript
-angular.module('myApp', []).
+angular.module('myApp', ['btford.modal']).
 
 // let's make a modal called `myModal`
 factory('myModal', function (btfModal) {
