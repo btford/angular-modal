@@ -23,6 +23,11 @@
   "devDependencies": {
     "karma": "~0.10",
     "karma-junit-reporter": "~0.1.0",
-    "bower": "~1.2.7"
+    "bower": "~1.2.7",
+    "gulp": "~3.5.5",
+    "gulp-util": "~2.2.14",
+    "gulp-uglify": "~0.2.1",
+    "gulp-rename": "~1.2.0",
+    "gulp-ngmin": "~0.1.2"
   }
 }
