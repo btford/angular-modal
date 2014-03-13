@@ -8,7 +8,14 @@
 'use strict';
 
 angular.module('btford.modal', []).
-factory('btfModal', function ($compile, $rootScope, $controller, $q, $http, $templateCache) {
+factory('btfModal', [
+  '$compile',
+  '$rootScope',
+  '$controller',
+  '$q',
+  '$http',
+  '$templateCache',
+  function ($compile, $rootScope, $controller, $q, $http, $templateCache) {
   return function modalFactory (config) {
 
     if ((+!!config.template) + (+!!config.templateUrl) !== 1) {
@@ -76,4 +83,4 @@ factory('btfModal', function ($compile, $rootScope, $controller, $q, $http, $tem
       active: active
     };
   };
-});
+}]);
