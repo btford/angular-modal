@@ -20,7 +20,8 @@ factory('btfModal', function ($compile, $rootScope, $controller, $q, $http, $tem
         controllerAs  = config.controllerAs,
         container     = angular.element(config.container || document.body),
         element       = null,
-        html;
+        html,
+        scope;
 
     if (config.template) {
       var deferred = $q.defer();
@@ -42,11 +43,11 @@ factory('btfModal', function ($compile, $rootScope, $controller, $q, $http, $tem
         }
       });
     }
-
+    
     function attach (html, locals) {
       element = angular.element(html);
       container.prepend(element);
-      var scope = $rootScope.$new();
+      scope = $rootScope.$new();
       if (locals) {
         for (var prop in locals) {
           scope[prop] = locals[prop];
@@ -61,6 +62,7 @@ factory('btfModal', function ($compile, $rootScope, $controller, $q, $http, $tem
 
     function deactivate () {
       if (element) {
+        scope.$destroy();
         element.remove();
         element = null;
       }
