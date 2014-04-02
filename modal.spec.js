@@ -149,6 +149,28 @@ describe('btfModal', function() {
 
       expect(container.text()).toBe('');
     });
+
+    it('should destroy the scope when deactivated', function() {
+      var destroySpy = jasmine.createSpy('onDestroy');
+
+      var modal = btfModal({
+        template: '<span>{{greeting}}</span>',
+        container: container,
+        controller: function ($scope) {
+          $scope.$on('$destroy', destroySpy);
+        }
+      });
+
+      modal.activate();
+      rootScope.$digest();
+
+      expect(destroySpy).not.toHaveBeenCalled();
+
+      modal.deactivate();
+      rootScope.$digest();
+
+      expect(destroySpy).toHaveBeenCalled();
+    });
   });
 
 
