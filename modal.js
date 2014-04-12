@@ -43,7 +43,7 @@ factory('btfModal', function ($compile, $rootScope, $controller, $q, $http, $tem
         }
       });
     }
-
+    
     function attach (html, locals) {
       element = angular.element(html);
       container.prepend(element);
