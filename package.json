@@ -1,6 +1,6 @@
 {
   "name": "angular-modal",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "easily add a modal to your angular app",
   "main": "modal.js",
   "scripts": {
