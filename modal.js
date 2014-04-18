@@ -8,7 +8,7 @@
 'use strict';
 
 angular.module('btford.modal', []).
-factory('btfModal', function ($compile, $rootScope, $controller, $q, $http, $templateCache) {
+factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $http, $templateCache) {
   return function modalFactory (config) {
 
     if ((+!!config.template) + (+!!config.templateUrl) !== 1) {
@@ -49,7 +49,7 @@ factory('btfModal', function ($compile, $rootScope, $controller, $q, $http, $tem
       if (element.length === 0) {
         throw new Error('The template contains no elements; you need to wrap text nodes')
       }
-      container.prepend(element);
+      $animate.enter(element, container);
       scope = $rootScope.$new();
       if (locals) {
         for (var prop in locals) {
@@ -65,9 +65,10 @@ factory('btfModal', function ($compile, $rootScope, $controller, $q, $http, $tem
 
     function deactivate () {
       if (element) {
-        scope.$destroy();
-        element.remove();
-        element = null;
+        $animate.leave(element, function () {
+          scope.$destroy();
+          element = null;
+        });
       }
     }
 
