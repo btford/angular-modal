@@ -39,6 +39,16 @@ describe('btfModal', function() {
     expect(function () { btfModal({}); }).toThrow();
   });
 
+  it('should throw if called with a text node', function() {
+    var modal = btfModal({
+      template: 'hey'
+    });
+    expect(function () {
+      modal.activate();
+      rootScope.$digest();
+    }).toThrow();
+  });
+
   it('should throw if called with both `template` and `templateUrl` options', function() {
     expect(function () {
       btfModal({

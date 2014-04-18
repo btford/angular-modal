@@ -46,6 +46,9 @@ factory('btfModal', function ($compile, $rootScope, $controller, $q, $http, $tem
 
     function attach (html, locals) {
       element = angular.element(html);
+      if (element.length === 0) {
+        throw new Error('The template contains no elements; you need to wrap text nodes')
+      }
       container.prepend(element);
       scope = $rootScope.$new();
       if (locals) {
