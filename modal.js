@@ -10,8 +10,7 @@
 angular.module('btford.modal', []).
 factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $http, $templateCache) {
   return function modalFactory (config) {
-
-    if (config.template ^ config.templateUrl) {
+    if (!(!config.template ^ !config.templateUrl)) {
       throw new Error('Expected modal to have exacly one of either `template` or `templateUrl`');
     }
 
