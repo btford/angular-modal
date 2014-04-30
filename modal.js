@@ -18,6 +18,9 @@ factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $
         controller    = config.controller || angular.noop,
         controllerAs  = config.controllerAs,
         container     = angular.element(config.container || document.body),
+        open	 	  = config.open || angular.noop,
+        close 		  = config.close || angular.noop,        
+        deferred	  = null,
         element       = null,
         html,
         scope;
@@ -36,11 +39,18 @@ factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $
     }
 
     function activate (locals) {
+      deferred = $q.defer();
+    
       html.then(function (html) {
         if (!element) {
           attach(html, locals);
+		  open(element);                
         }
+      }, function(){
+          return deferred.reject();      
       });
+      
+      return deferred.promise;
     }
 
     function attach (html, locals) {
@@ -62,11 +72,13 @@ factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $
       $compile(element)(scope);
     }
 
-    function deactivate () {
+    function deactivate (exitCode) {
       if (element) {
+		close(element);      
         $animate.leave(element, function () {
-          scope.$destroy();
+          scope.$destroy();        
           element = null;
+          deferred.resolve(exitCode);        
         });
       }
     }

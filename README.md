@@ -177,19 +177,26 @@ Unless the template is very simple, you should probably use `config.templateUrl`
 #### `config.container`
 **DOM Node (optional):** DOM node to prepend . Defaults to `document.body`.
 
+#### `config.open`
+**function (optional):** Callback function when the modal is opened.
+
+#### `config.close`
+**function (optional):** Callback function when the modal is closed.
+
 
 ### `modalService`
 
 A `modalService` has just two methods: `activate` and `deactivate`.
 
-#### `modalService.activate`
+#### `modalService.activate` 
 
 Takes a hash of objects to add to the scope of the modal as locals.
-Adds the modal to the DOM by prepending it to the `<body>`.
+Adds the modal to the DOM by prepending it to the `<body>`. The `return is a promise` that resolves whenever deactivate is called with the parameter passed to deactivate. It only rejects if the the activate and attach service fails.
+
 
 #### `modalService.deactivate`
 
-Removes the modal (DOM and scope) from the DOM.
+Removes the modal (DOM and scope) from the DOM. The parameter passed to this object is the resolve parameter for promise returned by the activate function.
 
 #### `modalService.active`
 
