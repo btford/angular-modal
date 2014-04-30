@@ -1,6 +1,6 @@
 /*
  * @license
- * angular-modal v0.2.1
+ * angular-modal v0.3.0
  * (c) 2013 Brian Ford http://briantford.com
  * License: MIT
  */
@@ -8,10 +8,9 @@
 'use strict';
 
 angular.module('btford.modal', []).
-factory('btfModal', function ($compile, $rootScope, $controller, $q, $http, $templateCache) {
+factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $http, $templateCache) {
   return function modalFactory (config) {
-
-    if ((+!!config.template) + (+!!config.templateUrl) !== 1) {
+    if (!(!config.template ^ !config.templateUrl)) {
       throw new Error('Expected modal to have exacly one of either `template` or `templateUrl`');
     }
 
@@ -20,9 +19,8 @@ factory('btfModal', function ($compile, $rootScope, $controller, $q, $http, $tem
         controllerAs  = config.controllerAs,
         container     = angular.element(config.container || document.body),
         open	 	  = config.open || angular.noop,
-        close 		  = config.close || angular.noop,
+        close 		  = config.close || angular.noop,        
         element       = null,
-        deferred	  = null,
         html,
         scope;
 
@@ -41,21 +39,25 @@ factory('btfModal', function ($compile, $rootScope, $controller, $q, $http, $tem
 
     function activate (locals) {
       deferred = $q.defer();
-      
+    
       html.then(function (html) {
         if (!element) {
           attach(html, locals);
 		  open(element);                
-          return deferred.promise;
         }
+      }, function(){
+          return deferred.reject();      
       });
       
-      return $q.reject();
+      return deferred.promise;
     }
 
     function attach (html, locals) {
       element = angular.element(html);
-      container.prepend(element);
+      if (element.length === 0) {
+        throw new Error('The template contains no elements; you need to wrap text nodes')
+      }
+      $animate.enter(element, container);
       scope = $rootScope.$new();
       if (locals) {
         for (var prop in locals) {
@@ -71,22 +73,23 @@ factory('btfModal', function ($compile, $rootScope, $controller, $q, $http, $tem
 
     function deactivate (exitCode) {
       if (element) {
-        scope.$destroy();
-    	close(element);
-        element.remove();
-        element = null;
-        deferred.resolve(exitCode);
+		close(element);      
+        $animate.leave(element, function () {
+          scope.$destroy();        
+          element = null;
+          deferred.resolve(exitCode);        
+        });
       }
     }
 
     function active () {
       return !!element;
     }
-    
+
     return {
       activate: activate,
       deactivate: deactivate,
-      active: active,
+      active: active
     };
   };
 });
