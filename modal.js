@@ -20,6 +20,7 @@ factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $
         container     = angular.element(config.container || document.body),
         open	 	  = config.open || angular.noop,
         close 		  = config.close || angular.noop,        
+        deferred	  = null,
         element       = null,
         html,
         scope;
