@@ -1,6 +1,6 @@
 /*
  * @license
- * angular-modal v0.3.0
+ * angular-modal v0.2.1
  * (c) 2013 Brian Ford http://briantford.com
  * License: MIT
  */
@@ -8,9 +8,10 @@
 'use strict';
 
 angular.module('btford.modal', []).
-factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $http, $templateCache) {
+factory('btfModal', function ($compile, $rootScope, $controller, $q, $http, $templateCache) {
   return function modalFactory (config) {
-    if (!(!config.template ^ !config.templateUrl)) {
+
+    if ((+!!config.template) + (+!!config.templateUrl) !== 1) {
       throw new Error('Expected modal to have exacly one of either `template` or `templateUrl`');
     }
 
@@ -18,7 +19,10 @@ factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $
         controller    = config.controller || angular.noop,
         controllerAs  = config.controllerAs,
         container     = angular.element(config.container || document.body),
+        open	 	  = config.open || angular.noop,
+        close 		  = config.close || angular.noop,
         element       = null,
+        deferred	  = null,
         html,
         scope;
 
@@ -36,19 +40,22 @@ factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $
     }
 
     function activate (locals) {
+      deferred = $q.defer();
+      
       html.then(function (html) {
         if (!element) {
           attach(html, locals);
+		  open(element);                
+          return deferred.promise;
         }
       });
+      
+      return $q.reject();
     }
 
     function attach (html, locals) {
       element = angular.element(html);
-      if (element.length === 0) {
-        throw new Error('The template contains no elements; you need to wrap text nodes')
-      }
-      $animate.enter(element, container);
+      container.prepend(element);
       scope = $rootScope.$new();
       if (locals) {
         for (var prop in locals) {
@@ -62,23 +69,24 @@ factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $
       $compile(element)(scope);
     }
 
-    function deactivate () {
+    function deactivate (exitCode) {
       if (element) {
-        $animate.leave(element, function () {
-          scope.$destroy();
-          element = null;
-        });
+        scope.$destroy();
+    	close(element);
+        element.remove();
+        element = null;
+        deferred.resolve(exitCode);
       }
     }
 
     function active () {
       return !!element;
     }
-
+    
     return {
       activate: activate,
       deactivate: deactivate,
-      active: active
+      active: active,
     };
   };
 });
