@@ -141,6 +141,21 @@ describe('btfModal', function() {
 
         expect(container.text()).toBe('x');
       });
+
+      it('should resolve a promise after activating', function() {
+        var spy = jasmine.createSpy('activated');
+
+        var modal = btfModal({
+          template: '<span>x</span>',
+          container: container
+        });
+
+        modal.activate().then(spy);
+        expect(spy).not.toHaveBeenCalled();
+
+        $rootScope.$digest();
+        expect(spy).toHaveBeenCalled();
+      });
     });
 
 
@@ -183,6 +198,26 @@ describe('btfModal', function() {
 
         expect(destroySpy).toHaveBeenCalled();
       }));
+
+      it('should resolve a promise after deactivating', inject(function($$asyncCallback) {
+        var spy = jasmine.createSpy('deactivated');
+
+        var modal = btfModal({
+          template: '<span>x</span>',
+          container: container
+        });
+
+        modal.activate();
+        $rootScope.$digest();
+
+        modal.deactivate().then(spy);
+        expect(spy).not.toHaveBeenCalled();
+
+        $$asyncCallback.flush();
+        $rootScope.$digest();
+        expect(spy).toHaveBeenCalled();
+      }));
+
     });
 
 

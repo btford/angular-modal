@@ -36,7 +36,7 @@ factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $
     }
 
     function activate (locals) {
-      html.then(function (html) {
+      return html.then(function (html) {
         if (!element) {
           attach(html, locals);
         }
@@ -63,12 +63,17 @@ factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $
     }
 
     function deactivate () {
+      var deferred = $q.defer();
       if (element) {
         $animate.leave(element, function () {
           scope.$destroy();
           element = null;
+          deferred.resolve();
         });
+      } else {
+        deferred.resolve();
       }
+      return deferred.promise;
     }
 
     function active () {
