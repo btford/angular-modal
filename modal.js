@@ -19,7 +19,9 @@ factory('btfModal', function ($injector, $compile, $rootScope, $controller, $q, 
         controllerAs  = config.controllerAs,
         container     = angular.element(config.container || document.body),
         fake$animate  = {
-          enter: angular.noop,
+          enter: function(el, ctnr) {
+            el.prepend(ctnr);
+          },
           leave: function(el, fn) {
             return fn();
           }
