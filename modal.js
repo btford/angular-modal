@@ -1,6 +1,6 @@
 /*
  * @license
- * angular-modal v0.3.0
+ * angular-modal v0.3.1
  * (c) 2013 Brian Ford http://briantford.com
  * License: MIT
  */
@@ -8,7 +8,7 @@
 'use strict';
 
 angular.module('btford.modal', []).
-factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $http, $templateCache) {
+factory('btfModal', function ($injector, $compile, $rootScope, $controller, $q, $http, $templateCache) {
   return function modalFactory (config) {
     if (!(!config.template ^ !config.templateUrl)) {
       throw new Error('Expected modal to have exacly one of either `template` or `templateUrl`');
@@ -18,6 +18,13 @@ factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $
         controller    = config.controller || angular.noop,
         controllerAs  = config.controllerAs,
         container     = angular.element(config.container || document.body),
+        fake$animate  = {
+          enter: angular.noop,
+          leave: function(el, fn) {
+            return fn();
+          }
+        },
+        $animate      = $injector.has('$animate') ? $injector.get('$animate') : fake$animate,
         element       = null,
         html,
         scope;
@@ -46,7 +53,7 @@ factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $
     function attach (html, locals) {
       element = angular.element(html);
       if (element.length === 0) {
-        throw new Error('The template contains no elements; you need to wrap text nodes')
+        throw new Error('The template contains no elements; you need to wrap text nodes');
       }
       $animate.enter(element, container);
       scope = $rootScope.$new();
@@ -55,7 +62,9 @@ factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $
           scope[prop] = locals[prop];
         }
       }
-      var ctrl = $controller(controller, { $scope: scope });
+      var ctrl = $controller(controller, {
+        $scope: scope
+      });
       if (controllerAs) {
         scope[controllerAs] = ctrl;
       }
