@@ -23,6 +23,7 @@ factory('btfModal', function ($injector, $compile, $rootScope, $controller, $q, 
             el.prepend(ctnr);
           },
           leave: function(el, fn) {
+            el.remove();
             return fn();
           }
         },
