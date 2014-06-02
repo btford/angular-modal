@@ -4,7 +4,7 @@
   "description": "easily add a modal to your angular app",
   "main": "modal.js",
   "scripts": {
-    "test": "./node_modules/.bin/bower install && ./node_modules/.bin/karma start karma-unit.conf.js --browsers Firefox --single-run"
+    "test": "./node_modules/.bin/bower install && ./node_modules/.bin/karma start karma.conf.js --browsers Firefox --single-run"
   },
   "repository": {
     "type": "git",

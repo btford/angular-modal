@@ -203,7 +203,7 @@ Returns whether or not the modal is currently activated.
 You can run the tests with [`karma`](http://karma-runner.github.io/0.10/index.html):
 
 ```shell
-karma start karma-unit.conf.js
+karma start karma.conf.js
 ```
 
 
