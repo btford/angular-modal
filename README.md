@@ -186,7 +186,7 @@ A `modalService` has just two methods: `activate` and `deactivate`.
 
 Takes a hash of objects to add to the scope of the modal as locals.
 Adds the modal to the DOM by prepending it to the `<body>`.
-Returns a promise that resolves once the modal is active.
+Returns a promise that resolves with the modal element once the modal is active.
 
 #### `modalService.deactivate`
 
