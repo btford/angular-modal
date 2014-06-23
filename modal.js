@@ -40,6 +40,8 @@ factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $
         if (!element) {
           attach(html, locals);
         }
+
+        return element;
       });
     }
 

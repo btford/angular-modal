@@ -156,6 +156,25 @@ describe('btfModal', function() {
         $rootScope.$digest();
         expect(spy).toHaveBeenCalled();
       });
+
+      it('should yield the modal element when resolving the promise', function() {
+        var spy = jasmine.createSpy('activated');
+
+        var modal = btfModal({
+          template: '<span>{{greeting}}</span>',
+          controller: function ($scope) {
+            $scope.greeting = 'bonne nuit';
+          },
+          container: container
+        });
+
+        modal.activate().then(spy);
+
+        $rootScope.$digest();
+
+        expect(spy).toHaveBeenCalledWith(jasmine.any(Object));
+        expect(spy.mostRecentCall.args[0].text()).toEqual('bonne nuit');
+      });
     });
 
 
