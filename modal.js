@@ -17,7 +17,6 @@ factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $
     var template      = config.template,
         controller    = config.controller || angular.noop,
         controllerAs  = config.controllerAs,
-        container     = angular.element(config.container || document.body),
         element       = null,
         container     = angular.element(document.body),
         html,
