@@ -19,6 +19,8 @@ bower install angular-modal
 
 [Plunker demo](http://plnkr.co/edit/lJDNqafSCKdpMI8AjR0B?p=preview)
 
+[Plunker demo (with animations)](http://plnkr.co/edit/EymZrEhiWa4zvXiA37qL?p=preview)
+
 ### Typical Use
 
 > app.js
@@ -62,6 +64,41 @@ controller('MyCtrl', function (myModal) {
   <a href ng-click="ctrl.showModal()">Show the modal</a>
 </div>
 ```
+
+### Animations
+
+With Angular 1.2, ngAnimate needs to be loaded as a separate module and injected as a dependency. Upon modal ```activate``` and ```deactivate```, animation css classes are automatically added to the element.
+
+> app.js
+
+```javascript
+angular.module('myApp', ['btford.modal', 'ngAnimate']).
+// ...
+```
+
+> modal.css
+
+```css
+// ...
+.btf-modal.ng-enter {
+  transition: 1s linear all;
+  opacity: 0;
+}
+.btf-modal.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+.btf-modal.ng-leave {
+  transition: 1s linear all;
+  opacity: 1;
+}
+.btf-modal.ng-leave.ng-leave-active {
+  transition: 1s linear all;
+  opacity: 0;
+}
+```
+
+**Note:** the container in which the element is attached to must be under ng-app where ngAnimate is injected.
+
 
 ### Cleaning up
 
