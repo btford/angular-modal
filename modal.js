@@ -46,9 +46,8 @@ factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $
     function attach (html, locals) {
       element = angular.element(html);
       if (element.length === 0) {
-        throw new Error('The template contains no elements; you need to wrap text nodes')
+        throw new Error('The template contains no elements; you need to wrap text nodes');
       }
-      $animate.enter(element, container);
       scope = $rootScope.$new();
       if (locals) {
         for (var prop in locals) {
@@ -59,7 +58,8 @@ factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $
       if (controllerAs) {
         scope[controllerAs] = ctrl;
       }
-      $compile(element)(scope);
+      $compile(element)(scope)
+      $animate.enter(element, container);
     }
 
     function deactivate () {
