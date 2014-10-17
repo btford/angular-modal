@@ -7,6 +7,8 @@ describe('btfModal', function() {
 
   beforeEach(module('btford.modal'));
 
+  beforeEach(module('ngAnimateMock'));
+
   beforeEach(function () {
     container = angular.element('<div></div>');
   });
@@ -176,7 +178,7 @@ describe('btfModal', function() {
         expect(container.text()).toBe('');
       });
 
-      it('should destroy the scope when deactivated', inject(function($$asyncCallback) {
+      it('should destroy the scope when deactivated', inject(function($animate) {
         var destroySpy = jasmine.createSpy('onDestroy');
 
         var modal = btfModal({
@@ -194,12 +196,12 @@ describe('btfModal', function() {
 
         modal.deactivate();
         $rootScope.$digest();
-        $$asyncCallback.flush();
+        $animate.triggerCallbacks();
 
         expect(destroySpy).toHaveBeenCalled();
       }));
 
-      it('should resolve a promise after deactivating', inject(function($$asyncCallback) {
+      it('should resolve a promise after deactivating', inject(function($animate) {
         var spy = jasmine.createSpy('deactivated');
 
         var modal = btfModal({
@@ -213,7 +215,7 @@ describe('btfModal', function() {
         modal.deactivate().then(spy);
         expect(spy).not.toHaveBeenCalled();
 
-        $$asyncCallback.flush();
+        $animate.triggerCallbacks();
         $rootScope.$digest();
         expect(spy).toHaveBeenCalled();
       }));
@@ -222,7 +224,7 @@ describe('btfModal', function() {
 
 
     describe('#active', function () {
-      it('should return the state of the modal', inject(function($$asyncCallback) {
+      it('should return the state of the modal', inject(function($animate) {
 
         var modal = btfModal({
           template: '<span>{{greeting}}</span>',
@@ -238,7 +240,7 @@ describe('btfModal', function() {
 
         modal.deactivate();
         $rootScope.$digest();
-        $$asyncCallback.flush();
+        $animate.triggerCallbacks();
 
         expect(modal.active()).toBe(false);
       }));
@@ -249,8 +251,6 @@ describe('btfModal', function() {
   describe('with animations', function () {
     var $animate,
         modal;
-
-    beforeEach(module('ngAnimateMock'));
 
     beforeEach(inject(function(btfModal, _$rootScope_, _$animate_) {
       $rootScope = _$rootScope_;
