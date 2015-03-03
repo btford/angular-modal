@@ -8,7 +8,9 @@
 'use strict';
 
 angular.module('btford.modal', []).
-factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $http, $templateCache) {
+    factory('btfModal', ['$animate', '$compile', '$rootScope', '$controller', '$q', '$http', '$templateCache', modalFactoryFactory]);
+
+function modalFactoryFactory($animate, $compile, $rootScope, $controller, $q, $http, $templateCache) {
   return function modalFactory (config) {
     if (!(!config.template ^ !config.templateUrl)) {
       throw new Error('Expected modal to have exacly one of either `template` or `templateUrl`');
@@ -86,4 +88,4 @@ factory('btfModal', function ($animate, $compile, $rootScope, $controller, $q, $
       active: active
     };
   };
-});
+}
