@@ -114,7 +114,25 @@ describe('btfModal', function() {
         expect(container.text()).toBe('boa noite');
       });
 
-      it('should pass locals to the modal scope', function() {
+      it('should pass locals to the controller scope', function() {
+        var modal = btfModal({
+          template: '<span>{{ctrl.greeting}}</span>',
+          controller: function (greeting) {
+            this.greeting = greeting;
+          },
+          controllerAs: 'ctrl',
+          container: container
+        });
+
+        modal.activate({
+          greeting: 'おはよう〜'
+        });
+        $rootScope.$digest();
+
+        expect(container.text()).toBe('おはよう〜');
+      });
+
+      it('should pass locals to the modal scope if there is no controller', function() {
         var modal = btfModal({
           template: '<span>{{greeting}}</span>',
           container: container
@@ -176,7 +194,7 @@ describe('btfModal', function() {
         expect(container.text()).toBe('');
       });
 
-      it('should destroy the scope when deactivated', inject(function($$asyncCallback) {
+      it('should destroy the scope when deactivated', inject(function($browser) {
         var destroySpy = jasmine.createSpy('onDestroy');
 
         var modal = btfModal({
@@ -188,18 +206,13 @@ describe('btfModal', function() {
         });
 
         modal.activate();
-        $rootScope.$digest();
-
-        expect(destroySpy).not.toHaveBeenCalled();
-
-        modal.deactivate();
-        $rootScope.$digest();
-        $$asyncCallback.flush();
+        modal.deactivate().then(destroySpy);
+        $browser.defer.flush();
 
         expect(destroySpy).toHaveBeenCalled();
       }));
 
-      it('should resolve a promise after deactivating', inject(function($$asyncCallback) {
+      it('should resolve a promise after deactivating', inject(function($browser) {
         var spy = jasmine.createSpy('deactivated');
 
         var modal = btfModal({
@@ -208,13 +221,9 @@ describe('btfModal', function() {
         });
 
         modal.activate();
-        $rootScope.$digest();
-
         modal.deactivate().then(spy);
-        expect(spy).not.toHaveBeenCalled();
+        $browser.defer.flush();
 
-        $$asyncCallback.flush();
-        $rootScope.$digest();
         expect(spy).toHaveBeenCalled();
       }));
 
@@ -222,7 +231,7 @@ describe('btfModal', function() {
 
 
     describe('#active', function () {
-      it('should return the state of the modal', inject(function($$asyncCallback) {
+      it('should return the state of the modal', inject(function($browser) {
 
         var modal = btfModal({
           template: '<span>{{greeting}}</span>',
@@ -233,14 +242,8 @@ describe('btfModal', function() {
         expect(modal.active()).toBe(false);
 
         modal.activate();
-        $rootScope.$digest();
+        $browser.defer.flush();
         expect(modal.active()).toBe(true);
-
-        modal.deactivate();
-        $rootScope.$digest();
-        $$asyncCallback.flush();
-
-        expect(modal.active()).toBe(false);
       }));
     });
   });

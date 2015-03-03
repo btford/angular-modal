@@ -17,7 +17,7 @@ function modalFactoryFactory($animate, $compile, $rootScope, $controller, $q, $h
     }
 
     var template      = config.template,
-        controller    = config.controller || angular.noop,
+        controller    = config.controller || null,
         controllerAs  = config.controllerAs,
         container     = angular.element(config.container || document.body),
         element       = null,
@@ -25,9 +25,7 @@ function modalFactoryFactory($animate, $compile, $rootScope, $controller, $q, $h
         scope;
 
     if (config.template) {
-      var deferred = $q.defer();
-      deferred.resolve(config.template);
-      html = deferred.promise;
+      html = $q.when(config.template);
     } else {
       html = $http.get(config.templateUrl, {
         cache: $templateCache
@@ -45,37 +43,41 @@ function modalFactoryFactory($animate, $compile, $rootScope, $controller, $q, $h
       });
     }
 
+
     function attach (html, locals) {
       element = angular.element(html);
       if (element.length === 0) {
         throw new Error('The template contains no elements; you need to wrap text nodes')
       }
-      $animate.enter(element, container);
       scope = $rootScope.$new();
-      if (locals) {
+      if (controller) {
+        if (!locals) {
+          locals = {};
+        }
+        locals.$scope = scope;
+        var ctrl = $controller(controller, locals);
+        if (controllerAs) {
+          scope[controllerAs] = ctrl;
+        }
+      } else if (locals) {
         for (var prop in locals) {
           scope[prop] = locals[prop];
         }
       }
-      var ctrl = $controller(controller, { $scope: scope });
-      if (controllerAs) {
-        scope[controllerAs] = ctrl;
-      }
       $compile(element)(scope);
+      return $animate.enter(element, container);
     }
 
     function deactivate () {
-      var deferred = $q.defer();
-      if (element) {
-        $animate.leave(element, function () {
-          scope.$destroy();
-          element = null;
-          deferred.resolve();
-        });
-      } else {
-        deferred.resolve();
+      if (!element) {
+        return $q.when();
       }
-      return deferred.promise;
+      return $animate.leave(element).then(function () {
+        scope.$destroy();
+        scope = null;
+        element.remove();
+        element = null;
+      });
     }
 
     function active () {
