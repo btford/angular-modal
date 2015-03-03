@@ -6,7 +6,7 @@ A modal factory service for AngularJS that makes it easy to add modals to your a
 ## Install
 
 ```shell
-bower install angular-modal
+npm install angular-modal
 ```
 
 ## Usage
