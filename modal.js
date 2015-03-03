@@ -1,6 +1,6 @@
 /*
  * @license
- * angular-modal v0.4.0
+ * angular-modal v0.5.0
  * (c) 2013 Brian Ford http://briantford.com
  * License: MIT
  */
