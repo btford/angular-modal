@@ -9,6 +9,12 @@ A modal factory service for AngularJS that makes it easy to add modals to your a
 npm install angular-modal
 ```
 
+If you prefer using bower as a package manager, you can also install it with:
+
+```shell
+bower install --save angular-modal
+```
+
 ## Usage
 1. Include the `modal.js` script provided by this component into your app.
 2. *Optional:* Include the `modal.css` style provided by this component into your html.
