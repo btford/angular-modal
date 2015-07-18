@@ -19,7 +19,7 @@ function modalFactoryFactory($animate, $compile, $rootScope, $controller, $q, $h
     var template      = config.template,
         controller    = config.controller || null,
         controllerAs  = config.controllerAs,
-        container     = angular.element(config.container || document.body),
+        container     = config.container || document.body,
         element       = null,
         html,
         scope;
@@ -65,7 +65,7 @@ function modalFactoryFactory($animate, $compile, $rootScope, $controller, $q, $h
         }
       }
       $compile(element)(scope);
-      return $animate.enter(element, container);
+      return $animate.enter(element, angular.element(container));
     }
 
     function deactivate () {
