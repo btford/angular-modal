@@ -73,10 +73,14 @@ function modalFactoryFactory($animate, $compile, $rootScope, $controller, $q, $h
         return $q.when();
       }
       return $animate.leave(element).then(function () {
-        scope.$destroy();
-        scope = null;
-        element.remove();
-        element = null;
+        if(scope){
+          scope.$destroy();
+          scope = null;
+        }
+        if(element){
+            element.remove();
+            element = null;
+        }
       });
     }
 
